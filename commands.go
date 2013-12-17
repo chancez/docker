@@ -463,11 +463,11 @@ func (cli *DockerCli) CmdInfo(args ...string) error {
 	fmt.Fprintf(cli.out, "Total Containers: %d\n", out.Containers)
 	if out.RunningContainers > 0 {
 		fmt.Fprintf(cli.out, "Memory Usage (Running): %v\n",
-			utils.ByteSize(out.MemUsageRunning))
+			utils.HumanSize(out.MemUsageRunning))
 	}
 	if out.MemUsageTotal != 0 {
 		fmt.Fprintf(cli.out, "Max Memory Usage (Total Combined Memory Limit): %s\n",
-			utils.ByteSize(out.MemUsageTotal))
+			utils.HumanSize(out.MemUsageTotal))
 	}
 	fmt.Fprintf(cli.out, "Images: %d\n", out.Images)
 	if out.Debug || os.Getenv("DEBUG") != "" {
@@ -491,8 +491,8 @@ func (cli *DockerCli) CmdInfo(args ...string) error {
 	fmt.Fprintf(cli.out, "CPU Cores: %d\n", out.CPUCores)
 	fmt.Fprintf(cli.out, "CPU Averages: %.2f %.2f %.2f\n",
 		out.CPUAverage[0], out.CPUAverage[1], out.CPUAverage[2])
-	fmt.Fprintf(cli.out, "Free RAM: %v\n", utils.ByteSize(out.FreeRAM))
-	fmt.Fprintf(cli.out, "Total RAM: %v\n", utils.ByteSize(out.TotalRAM))
+	fmt.Fprintf(cli.out, "Free RAM: %v\n", utils.HumanSize(int64(out.FreeRAM)))
+	fmt.Fprintf(cli.out, "Total RAM: %v\n", utils.HumanSize(int64(out.TotalRAM)))
 
 	if !out.MemoryLimit {
 		fmt.Fprintf(cli.err, "WARNING: No memory limit support\n")

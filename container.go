@@ -1535,19 +1535,18 @@ type MemStat struct {
 }
 
 func (container *Container) GetMemStat() (*MemStat, error) {
-	cgroup_path, err := container.cgroupPath("memory")
+	cgroupPath, err := container.cgroupPath("memory")
 	if err != nil {
 		return nil, err
 	}
 
-	cgroup_file := path.Join(cgroup_path, "memory.stat")
-	content, err := ioutil.ReadFile(cgroup_file)
+	cgroupFile := path.Join(cgroupPath, "memory.stat")
+	content, err := ioutil.ReadFile(cgroupFile)
 	if err != nil {
 		return nil, err
 	}
 	buf := bytes.NewBuffer(content)
-	memory := new(MemStat)
-
+	var rss, cache, swap int64
 	for {
 		line, err := buf.ReadString('\n')
 		if err != nil {
@@ -1559,11 +1558,11 @@ func (container *Container) GetMemStat() (*MemStat, error) {
 		info := strings.Fields(line)
 		switch info[0] {
 		case "rss":
-			memory.rss, err = strconv.ParseInt(info[1], 10, 64)
+			rss, err = strconv.ParseInt(info[1], 10, 64)
 		case "cache":
-			memory.cache, err = strconv.ParseInt(info[1], 10, 64)
+			cache, err = strconv.ParseInt(info[1], 10, 64)
 		case "swap":
-			memory.swap, err = strconv.ParseInt(info[1], 10, 64)
+			swap, err = strconv.ParseInt(info[1], 10, 64)
 		default:
 			err = nil
 		}
@@ -1571,5 +1570,5 @@ func (container *Container) GetMemStat() (*MemStat, error) {
 			return nil, err
 		}
 	}
-	return memory, nil
+	return &MemStat{rss: rss, cache: cache, swap: swap}, nil
 }

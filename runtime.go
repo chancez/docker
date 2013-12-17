@@ -73,19 +73,19 @@ func (runtime *Runtime) ListRunning() []*Container {
 
 func (runtime *Runtime) ContainerMemUsage() *MemUsage {
 	containers := runtime.List()
-	usage := new(MemUsage)
+	var running, total int64
 	for _, container := range containers {
 		used, err := container.GetMemStat()
 		if err != nil {
-			return usage
+			return &MemUsage{}
 		}
 		total_usage := (used.rss + used.cache + used.swap)
 		if container.State.Running {
-			usage.running += total_usage
+			running += total_usage
 		}
-		usage.total += container.Config.Memory
+		total += container.Config.Memory
 	}
-	return usage
+	return &MemUsage{running: running, total: total}
 }
 
 func (runtime *Runtime) NewContainerInfo() *ContainerInfo {
