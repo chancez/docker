@@ -23,7 +23,7 @@ import (
 	"github.com/docker/docker/pkg/idtools"
 	"github.com/docker/docker/pkg/nat"
 	"github.com/docker/docker/pkg/stringid"
-	"github.com/docker/docker/pkg/system"
+	"github.com/docker/docker/pkg/system/filesys"
 	"github.com/docker/docker/pkg/ulimit"
 	"github.com/docker/docker/runconfig"
 	"github.com/docker/docker/utils"
@@ -1077,7 +1077,7 @@ func (container *Container) setupWorkingDirectory() error {
 				return err
 			}
 
-			if err := system.MkdirAll(pth, 0755); err != nil {
+			if err := filesys.MkdirAll(pth, 0755); err != nil {
 				return err
 			}
 		}

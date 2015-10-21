@@ -12,7 +12,7 @@ import (
 	"github.com/docker/docker/api/types"
 	derr "github.com/docker/docker/errors"
 	"github.com/docker/docker/pkg/chrootarchive"
-	"github.com/docker/docker/pkg/system"
+	"github.com/docker/docker/pkg/system/filesys"
 	"github.com/docker/docker/volume"
 )
 
@@ -48,7 +48,7 @@ func (m *mountPoint) Setup() (string, error) {
 				return "", err
 			}
 			logrus.Warnf("Auto-creating non-existant volume host path %s, this is deprecated and will be removed soon", m.Source)
-			if err := system.MkdirAll(m.Source, 0755); err != nil {
+			if err := filesys.MkdirAll(m.Source, 0755); err != nil {
 				return "", err
 			}
 		}

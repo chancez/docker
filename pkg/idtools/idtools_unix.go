@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/docker/docker/pkg/system"
+	"github.com/docker/docker/pkg/system/filesys"
 )
 
 func mkdirAs(path string, mode os.FileMode, ownerUID, ownerGID int, mkAll, chownExisting bool) error {
@@ -41,7 +41,7 @@ func mkdirAs(path string, mode os.FileMode, ownerUID, ownerGID int, mkAll, chown
 				paths = append(paths, dirPath)
 			}
 		}
-		if err := system.MkdirAll(path, mode); err != nil && !os.IsExist(err) {
+		if err := filesys.MkdirAll(path, mode); err != nil && !os.IsExist(err) {
 			return err
 		}
 	} else {

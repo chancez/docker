@@ -14,6 +14,7 @@ import (
 	"github.com/docker/docker/pkg/idtools"
 	"github.com/docker/docker/pkg/pools"
 	"github.com/docker/docker/pkg/system"
+	"github.com/docker/docker/pkg/system/filesys"
 )
 
 // UnpackLayer unpack `layer` to a `dest`. The stream `layer` can be
@@ -89,7 +90,7 @@ func UnpackLayer(dest string, layer Reader, options *TarOptions) (size int64, er
 			parentPath := filepath.Join(dest, parent)
 
 			if _, err := os.Lstat(parentPath); err != nil && os.IsNotExist(err) {
-				err = system.MkdirAll(parentPath, 0600)
+				err = filesys.MkdirAll(parentPath, 0600)
 				if err != nil {
 					return 0, err
 				}

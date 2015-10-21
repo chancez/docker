@@ -47,7 +47,7 @@ import (
 	"github.com/docker/docker/pkg/stringid"
 	"github.com/docker/docker/pkg/stringutils"
 	"github.com/docker/docker/pkg/sysinfo"
-	"github.com/docker/docker/pkg/system"
+	"github.com/docker/docker/pkg/system/filesys"
 	"github.com/docker/docker/pkg/truncindex"
 	"github.com/docker/docker/registry"
 	"github.com/docker/docker/runconfig"
@@ -741,7 +741,7 @@ func NewDaemon(config *Config, registryService *registry.Service) (daemon *Daemo
 
 	trustDir := filepath.Join(config.Root, "trust")
 
-	if err := system.MkdirAll(trustDir, 0700); err != nil {
+	if err := filesys.MkdirAll(trustDir, 0700); err != nil {
 		return nil, err
 	}
 
@@ -1231,7 +1231,7 @@ func (daemon *Daemon) verifyContainerSettings(hostConfig *runconfig.HostConfig, 
 	if config != nil {
 		if config.WorkingDir != "" {
 			config.WorkingDir = filepath.FromSlash(config.WorkingDir) // Ensure in platform semantics
-			if !system.IsAbs(config.WorkingDir) {
+			if !filesys.IsAbs(config.WorkingDir) {
 				return nil, fmt.Errorf("The working directory '%s' is invalid. It needs to be an absolute path.", config.WorkingDir)
 			}
 		}

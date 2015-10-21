@@ -24,7 +24,7 @@ import (
 	"github.com/docker/docker/pkg/nat"
 	"github.com/docker/docker/pkg/signal"
 	"github.com/docker/docker/pkg/stringutils"
-	"github.com/docker/docker/pkg/system"
+	"github.com/docker/docker/pkg/system/filesys"
 	"github.com/docker/docker/runconfig"
 )
 
@@ -276,7 +276,7 @@ func workdir(b *Builder, args []string, attributes map[string]bool, original str
 	// specific semantics, hence ensure it is converted.
 	workdir := filepath.FromSlash(args[0])
 
-	if !system.IsAbs(workdir) {
+	if !filesys.IsAbs(workdir) {
 		current := filepath.FromSlash(b.runConfig.WorkingDir)
 		workdir = filepath.Join(string(os.PathSeparator), current, workdir)
 	}

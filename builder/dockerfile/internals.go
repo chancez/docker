@@ -33,6 +33,7 @@ import (
 	"github.com/docker/docker/pkg/stringid"
 	"github.com/docker/docker/pkg/stringutils"
 	"github.com/docker/docker/pkg/system"
+	"github.com/docker/docker/pkg/system/filesys"
 	"github.com/docker/docker/pkg/tarsum"
 	"github.com/docker/docker/pkg/urlutil"
 	"github.com/docker/docker/runconfig"
@@ -208,7 +209,7 @@ func (b *Builder) runContextCommand(args []string, allowRemote bool, allowLocalD
 
 	// Twiddle the destination when its a relative path - meaning, make it
 	// relative to the WORKINGDIR
-	if !system.IsAbs(dest) {
+	if !filesys.IsAbs(dest) {
 		hasSlash := strings.HasSuffix(dest, string(os.PathSeparator))
 		dest = filepath.Join(string(os.PathSeparator), filepath.FromSlash(b.runConfig.WorkingDir), dest)
 
